@@ -30,7 +30,9 @@ class ListStoryAdapter(
         story?.let { holder.bind(it) }
     }
 
-    inner class ListViewHolder(var binding: ItemRowStoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(val binding: ItemRowStoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+            
         fun bind(story: StoryEntity) {
             binding.root.setOnClickListener {
                 onItemClick(story)

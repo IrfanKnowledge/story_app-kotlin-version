@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
@@ -16,6 +18,7 @@ import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentHomeBinding
 import com.irfan.storyapp.presentation.adapter.ListStoryAdapter
+import com.irfan.storyapp.presentation.adapter.LoadingStateAdapter
 import com.irfan.storyapp.presentation.view_model.HomeViewModel
 import com.irfan.storyapp.presentation.view_model.SettingViewModel
 import com.irfan.storyapp.presentation.view_model_factory.HomeViewModelFactory
@@ -74,10 +77,12 @@ class HomeFragment : Fragment() {
                     is ResultState.HasData -> {
                         onHasData(resultState.data)
                     }
+
                     is ResultState.Error -> {
                         view.findNavController()
                             .navigate(R.id.action_homeFragment_to_signInFragment)
                     }
+
                     else -> Unit
                 }
             }
@@ -134,10 +139,28 @@ class HomeFragment : Fragment() {
     private fun showRecyclerView(viewModelHome: HomeViewModel) {
         binding.apply {
             homeRv.layoutManager = LinearLayoutManager(requireActivity())
+
             val adapterListStory = ListStoryAdapter { story ->
                 Log.d(TAG, "showRecyclerView: tap ${story.name}")
             }
-            homeRv.adapter = adapterListStory
+
+            val errorMessage = getString(R.string.failed_to_load_data)
+
+            homeRv.adapter = adapterListStory.withLoadStateFooter(
+                footer = LoadingStateAdapter(errorMessage) {
+                    adapterListStory.retry()
+                }
+            )
+
+            homeSwipeRefresh.setOnRefreshListener {
+                adapterListStory.refresh()
+            }
+
+            adapterListStory.addLoadStateListener {
+                homeRv.isVisible = it.source.refresh is LoadState.NotLoading
+                homeSwipeRefresh.isRefreshing = it.source.refresh is LoadState.Loading
+            }
+
             viewModelHome.listStory.observe(viewLifecycleOwner) {
                 adapterListStory.submitData(lifecycle, it)
             }

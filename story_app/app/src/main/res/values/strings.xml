@@ -9,8 +9,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment 1</string>
+
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
@@ -20,4 +20,6 @@
     <string name="story_app">Story App</string>
     <string name="sign_out">Sign Out</string>
     <string name="story_image_view_description">Gambar dari Story yang dibagikan</string>
+    <string name="reload">coba lagi</string>
+    <string name="failed_to_load_data">Gagal memuat data</string>
 </resources>
