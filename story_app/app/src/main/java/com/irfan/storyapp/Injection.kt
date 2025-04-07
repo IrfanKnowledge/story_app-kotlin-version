@@ -1,10 +1,12 @@
 package com.irfan.storyapp
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.irfan.storyapp.data.datasource.ApiConfig
 import com.irfan.storyapp.data.datasource.SettingPreferencesDataStore
 import com.irfan.storyapp.data.repository.AuthRepository
+import com.irfan.storyapp.data.repository.DetailStoryRepository
 import com.irfan.storyapp.data.repository.HomeRepository
 import com.irfan.storyapp.data.repository.SettingRepository
 
@@ -26,4 +28,13 @@ object Injection {
 
         return HomeRepository.getInstance(apiService)
     }
+
+    fun provideDetailStoryRepository(token: String?): DetailStoryRepository {
+        Log.d(TAG, "provideDetailStoryRepository, token: $token")
+        val apiService = ApiConfig.getApiService(token)
+
+        return DetailStoryRepository.getInstance(apiService)
+    }
+
+    const val TAG = "Injection"
 }

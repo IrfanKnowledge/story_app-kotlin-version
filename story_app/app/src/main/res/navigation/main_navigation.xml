@@ -57,7 +57,17 @@
         android:id="@+id/detailStoryFragment"
         android:name="com.irfan.storyapp.presentation.ui.DetailStoryFragment"
         android:label="fragment_detail_story"
-        tools:layout="@layout/fragment_detail_story" />
+        tools:layout="@layout/fragment_detail_story" >
+        <action
+            android:id="@+id/action_detailStoryFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/detailStoryFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.irfan.storyapp.presentation.ui.SignUpFragment"

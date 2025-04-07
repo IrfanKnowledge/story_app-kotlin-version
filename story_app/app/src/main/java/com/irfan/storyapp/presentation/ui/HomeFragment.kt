@@ -27,6 +27,7 @@ import com.irfan.storyapp.presentation.view_model_factory.SettingViewModelFactor
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapterListStory: ListStoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +56,7 @@ class HomeFragment : Fragment() {
             val viewModelHome: HomeViewModel by viewModels {
                 factoryHome
             }
-            showRecyclerView(viewModelHome)
+            showRecyclerView(viewModelHome, view)
         }
 
         showLoading(false)
@@ -129,19 +130,16 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.apply {
-            homeGroup.visibility = if (isLoading) View.GONE else View.VISIBLE
-            homeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun showRecyclerView(viewModelHome: HomeViewModel) {
+    private fun showRecyclerView(viewModelHome: HomeViewModel, view: View) {
         binding.apply {
             homeRv.layoutManager = LinearLayoutManager(requireActivity())
 
-            val adapterListStory = ListStoryAdapter { story ->
-                Log.d(TAG, "showRecyclerView: tap ${story.name}")
+            adapterListStory = ListStoryAdapter { story ->
+                Log.d(TAG, "showRecyclerView, onTap, name: ${story.name}, id: ${story.id}")
+                val id = story.id ?: ""
+                val toDetailStoryFragment =
+                    HomeFragmentDirections.actionHomeFragmentToDetailStoryFragment(id)
+                view.findNavController().navigate(toDetailStoryFragment)
             }
 
             val errorMessage = getString(R.string.failed_to_load_data)
@@ -164,9 +162,24 @@ class HomeFragment : Fragment() {
             viewModelHome.listStory.observe(viewLifecycleOwner) {
                 adapterListStory.submitData(lifecycle, it)
             }
+
+            homeFabAddStory.setOnClickListener {
+                Log.d(TAG, "showRecyclerView, FAB, onTap: navigate to Add Story page")
+            }
         }
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        binding.apply {
+            homeGroup.visibility = if (isLoading) View.GONE else View.VISIBLE
+            homeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapterListStory.refresh()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

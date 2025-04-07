@@ -21,5 +21,9 @@
     <string name="sign_out">Sign Out</string>
     <string name="story_image_view_description">Gambar dari Story yang dibagikan</string>
     <string name="reload">coba lagi</string>
+    <string name="no_data">Tidak ada data</string>
     <string name="failed_to_load_data">Gagal memuat data</string>
+    <string name="detail_story">Detail Story</string>
+    <string name="story_picture_description">Gambar postingan cerita</string>
+    <string name="btn_navigate_to_add_story_page">Tombol berpindah ke halaman Tambah Story</string>
 </resources>

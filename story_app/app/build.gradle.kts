@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
+    id ("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -46,7 +47,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.swiperefreshlayout)
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

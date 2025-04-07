@@ -10,7 +10,7 @@ import com.irfan.storyapp.databinding.ItemRowStoryBinding
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
 class ListStoryAdapter(
-    private val onItemClick: (StoryEntity) -> Unit,
+    private val onTap: (StoryEntity) -> Unit,
 ) : PagingDataAdapter<StoryEntity, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -35,7 +35,7 @@ class ListStoryAdapter(
             
         fun bind(story: StoryEntity) {
             binding.root.setOnClickListener {
-                onItemClick(story)
+                onTap(story)
             }
         }
     }
