@@ -5,6 +5,7 @@
     android:id="@+id/detail_story_swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".presentation.ui.DetailStoryFragment">
 
     <ScrollView

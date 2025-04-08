@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -53,7 +54,7 @@ class HomeFragment : Fragment() {
 
         viewModelGetTokenResultObserve(viewModelSetting, view) { token ->
             val factoryHome = HomeViewModelFactory.getInstance(token)
-            val viewModelHome: HomeViewModel by viewModels {
+            val viewModelHome: HomeViewModel by navGraphViewModels(R.id.main_navigation) {
                 factoryHome
             }
             showRecyclerView(viewModelHome, view)
@@ -163,8 +164,16 @@ class HomeFragment : Fragment() {
                 adapterListStory.submitData(lifecycle, it)
             }
 
+            viewModelHome.refreshListStory.observe(viewLifecycleOwner) {
+                it.getContentIfNotHandled()?.let {
+                    adapterListStory.refresh()
+                }
+            }
+
             homeFabAddStory.setOnClickListener {
                 Log.d(TAG, "showRecyclerView, FAB, onTap: navigate to Add Story page")
+                view.findNavController()
+                    .navigate(R.id.action_homeFragment_to_addStoryFragment)
             }
         }
     }
@@ -174,11 +183,6 @@ class HomeFragment : Fragment() {
             homeGroup.visibility = if (isLoading) View.GONE else View.VISIBLE
             homeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adapterListStory.refresh()
     }
 
     override fun onDestroyView() {
