@@ -10,17 +10,18 @@ import com.irfan.storyapp.common.SingleEvent
 import com.irfan.storyapp.data.repository.HomeRepository
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
-class HomeViewModel(homeRepository: HomeRepository) : ViewModel() {
+class HomeViewModel(private val homeRepository: HomeRepository) : ViewModel() {
     val listStory: LiveData<PagingData<StoryEntity>> =
         homeRepository.getStories(5).cachedIn(viewModelScope)
 
     private val _refreshListStory = MutableLiveData<SingleEvent<Unit>>()
     val refreshListStory: LiveData<SingleEvent<Unit>> = _refreshListStory
 
+    var updateListStory: Boolean = false
+
     fun refreshListStory() {
         _refreshListStory.value = SingleEvent(Unit)
     }
-
 
     companion object {
         const val TAG = "HomeViewModel"

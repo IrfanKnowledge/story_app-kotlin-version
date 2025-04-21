@@ -78,7 +78,7 @@
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/addStoryFragment"
-        android:name="com.irfan.storyapp.AddStoryFragment"
+        android:name="com.irfan.storyapp.presentation.ui.AddStoryFragment"
         android:label="fragment_add_story"
         tools:layout="@layout/fragment_add_story" >
         <action

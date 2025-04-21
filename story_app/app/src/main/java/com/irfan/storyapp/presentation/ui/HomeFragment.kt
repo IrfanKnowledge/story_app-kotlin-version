@@ -151,23 +151,38 @@ class HomeFragment : Fragment() {
                 }
             )
 
+            viewModelHome.refreshListStory.observe(viewLifecycleOwner) {
+                it.getContentIfNotHandled()?.let {
+                    Log.d(TAG, "showRecyclerView, refreshListStory: refresh")
+                    adapterListStory.refresh()
+                }
+            }
+
             homeSwipeRefresh.setOnRefreshListener {
                 adapterListStory.refresh()
             }
 
-            adapterListStory.addLoadStateListener {
-                homeRv.isVisible = it.source.refresh is LoadState.NotLoading
-                homeSwipeRefresh.isRefreshing = it.source.refresh is LoadState.Loading
+            adapterListStory.addLoadStateListener { loadState ->
+                Log.d(TAG, "showRecyclerView, addLoadStateListener: trigger")
+                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.refresh: ${loadState.refresh}")
+                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.isIdle: ${loadState.isIdle}")
+                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.append: ${loadState.append}")
+                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.prepend: ${loadState.prepend}")
+                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.source: ${loadState.source}")
+                homeRv.isVisible = loadState.refresh is LoadState.NotLoading
+                homeSwipeRefresh.isRefreshing = loadState.refresh is LoadState.Loading
+
+                if (loadState.refresh is LoadState.Loading) {
+                    viewModelHome.updateListStory = true
+                }
+                if (loadState.refresh is LoadState.NotLoading && viewModelHome.updateListStory) {
+                    viewModelHome.updateListStory = false
+                    homeRv.scrollToPosition(0)
+                }
             }
 
             viewModelHome.listStory.observe(viewLifecycleOwner) {
                 adapterListStory.submitData(lifecycle, it)
-            }
-
-            viewModelHome.refreshListStory.observe(viewLifecycleOwner) {
-                it.getContentIfNotHandled()?.let {
-                    adapterListStory.refresh()
-                }
             }
 
             homeFabAddStory.setOnClickListener {

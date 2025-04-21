@@ -26,4 +26,11 @@
     <string name="detail_story">Detail Story</string>
     <string name="story_picture_description">Gambar postingan cerita</string>
     <string name="btn_navigate_to_add_story_page">Tombol berpindah ke halaman Tambah Story</string>
+    <string name="add_story">Add Story</string>
+    <string name="add_story_image_description">Gambar cerita untuk diposting</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="upload">Upload</string>
+    <string name="image_upload_empty">Pilih gambar terlebih dahulu!</string>
 </resources>

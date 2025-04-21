@@ -15,7 +15,7 @@ class HomeRepository private constructor(private val apiService: ApiService) {
         Log.d(TAG, "getStories, status: start")
         return Pager(
             config = PagingConfig(
-                pageSize = pageSize
+                pageSize = pageSize,
             ),
             pagingSourceFactory = {
                 HomePagingSource(apiService)
