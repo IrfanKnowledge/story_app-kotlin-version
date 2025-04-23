@@ -1,6 +1,7 @@
 package com.irfan.storyapp.presentation.ui
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class DetailStoryFragment : Fragment() {
     private var _binding: FragmentDetailStoryBinding? = null
@@ -32,6 +34,11 @@ class DetailStoryFragment : Fragment() {
     ): View {
         _binding = FragmentDetailStoryBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val animation = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = animation
+        postponeEnterTransition(200, TimeUnit.MILLISECONDS)
+
         return view
     }
 

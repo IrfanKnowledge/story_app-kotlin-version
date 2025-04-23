@@ -1,6 +1,7 @@
 package com.irfan.storyapp.presentation.ui
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,7 @@ import com.irfan.storyapp.presentation.view_model.HomeViewModel
 import com.irfan.storyapp.presentation.view_model.SettingViewModel
 import com.irfan.storyapp.presentation.view_model_factory.HomeViewModelFactory
 import com.irfan.storyapp.presentation.view_model_factory.SettingViewModelFactory
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -36,6 +39,11 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val animation = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementReturnTransition = animation
+        postponeEnterTransition(200, TimeUnit.MILLISECONDS)
+
         return view
     }
 
@@ -135,12 +143,26 @@ class HomeFragment : Fragment() {
         binding.apply {
             homeRv.layoutManager = LinearLayoutManager(requireActivity())
 
-            adapterListStory = ListStoryAdapter { story ->
+            adapterListStory = ListStoryAdapter { story, bindingItem ->
                 Log.d(TAG, "showRecyclerView, onTap, name: ${story.name}, id: ${story.id}")
+
                 val id = story.id ?: ""
                 val toDetailStoryFragment =
                     HomeFragmentDirections.actionHomeFragmentToDetailStoryFragment(id)
-                view.findNavController().navigate(toDetailStoryFragment)
+
+                val extras = FragmentNavigatorExtras(
+                    bindingItem.itemRowStoryImgContent to "detail_story_img_story_transition",
+                    bindingItem.itemRowStoryTvTitle to "detail_story_tv_title_transition",
+                    bindingItem.itemRowStoryTvDescription to "detail_story_tv_deskripsi_transition"
+                )
+
+//                val extras = FragmentNavigatorExtras(
+//                    bindingItem.itemRowStoryImgContent to "detail_story_img_story_transition",
+//                    bindingItem.itemRowStoryTvTitle to "detail_story_tv_title_transition",
+//                    bindingItem.itemRowStoryTvDescription to "detail_story_tv_deskripsi_transition"
+//                )
+
+                view.findNavController().navigate(toDetailStoryFragment, extras)
             }
 
             val errorMessage = getString(R.string.failed_to_load_data)
@@ -164,11 +186,26 @@ class HomeFragment : Fragment() {
 
             adapterListStory.addLoadStateListener { loadState ->
                 Log.d(TAG, "showRecyclerView, addLoadStateListener: trigger")
-                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.refresh: ${loadState.refresh}")
-                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.isIdle: ${loadState.isIdle}")
-                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.append: ${loadState.append}")
-                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.prepend: ${loadState.prepend}")
-                Log.d(TAG, "showRecyclerView, addLoadStateListener, loadState.source: ${loadState.source}")
+                Log.d(
+                    TAG,
+                    "showRecyclerView, addLoadStateListener, loadState.refresh: ${loadState.refresh}"
+                )
+                Log.d(
+                    TAG,
+                    "showRecyclerView, addLoadStateListener, loadState.isIdle: ${loadState.isIdle}"
+                )
+                Log.d(
+                    TAG,
+                    "showRecyclerView, addLoadStateListener, loadState.append: ${loadState.append}"
+                )
+                Log.d(
+                    TAG,
+                    "showRecyclerView, addLoadStateListener, loadState.prepend: ${loadState.prepend}"
+                )
+                Log.d(
+                    TAG,
+                    "showRecyclerView, addLoadStateListener, loadState.source: ${loadState.source}"
+                )
                 homeRv.isVisible = loadState.refresh is LoadState.NotLoading
                 homeSwipeRefresh.isRefreshing = loadState.refresh is LoadState.Loading
 

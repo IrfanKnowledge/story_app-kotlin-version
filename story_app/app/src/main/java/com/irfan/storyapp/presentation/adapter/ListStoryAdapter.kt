@@ -10,7 +10,7 @@ import com.irfan.storyapp.databinding.ItemRowStoryBinding
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
 class ListStoryAdapter(
-    private val onTap: (StoryEntity) -> Unit,
+    private val onTap: (story: StoryEntity, bindingItem: ItemRowStoryBinding) -> Unit,
 ) : PagingDataAdapter<StoryEntity, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -27,15 +27,22 @@ class ListStoryAdapter(
             .load(story?.photoUrl)
             .into(holder.binding.itemRowStoryImgContent)
 
-        story?.let { holder.bind(it) }
+        val id = story?.id ?: position.toString()
+        holder.binding.itemRowStoryImgContent.transitionName =
+            "detail_story_img_story_transition_$id"
+        holder.binding.itemRowStoryTvTitle.transitionName = "detail_story_tv_title_transition_$id"
+        holder.binding.itemRowStoryTvDescription.transitionName =
+            "detail_story_tv_deskripsi_transition_$id"
+
+        story?.let { holder.bind(it, position) }
     }
 
     inner class ListViewHolder(val binding: ItemRowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            
-        fun bind(story: StoryEntity) {
+
+        fun bind(story: StoryEntity, position: Int) {
             binding.root.setOnClickListener {
-                onTap(story)
+                onTap(story, binding)
             }
         }
     }

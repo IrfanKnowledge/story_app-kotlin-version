@@ -6,18 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
 import com.irfan.storyapp.common.CameraHelper
 import com.irfan.storyapp.common.ResultState
+import com.irfan.storyapp.common.reduceFileImage
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentAddStoryBinding
 import com.irfan.storyapp.presentation.view_model.AddStoryViewModel
@@ -25,6 +26,10 @@ import com.irfan.storyapp.presentation.view_model.HomeViewModel
 import com.irfan.storyapp.presentation.view_model.SettingViewModel
 import com.irfan.storyapp.presentation.view_model_factory.AddStoryViewModelFactory
 import com.irfan.storyapp.presentation.view_model_factory.SettingViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class AddStoryFragment : Fragment() {
     private var _binding: FragmentAddStoryBinding? = null
@@ -76,8 +81,6 @@ class AddStoryFragment : Fragment() {
 
         viewModelGetTokenResultObserve(viewModelSetting, view) { token ->
             val viewModelHome: HomeViewModel by navGraphViewModels(R.id.main_navigation)
-
-            onPop(viewModelHome, view)
 
             val factoryAddStory = AddStoryViewModelFactory.getInstance(token)
             viewModelAddStory = ViewModelProvider(this, factoryAddStory)[AddStoryViewModel::class.java]
@@ -149,21 +152,6 @@ class AddStoryFragment : Fragment() {
         }
     }
 
-    private fun onPop(viewModelHome: HomeViewModel, view: View) {
-        val navController = view.findNavController()
-
-        val callBack = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Log.d(TAG, "handleOnBackPressed: refresh")
-                viewModelHome.refreshListStory()
-
-                navController.popBackStack()
-            }
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callBack)
-    }
-
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
@@ -190,13 +178,25 @@ class AddStoryFragment : Fragment() {
     ) {
         viewModelAddStory?.apply {
             currentImageUri?.let { uri ->
-                val imageFile = CameraHelper.uriToFile(uri, requireActivity())
-                Log.d(TAG, "uploadImage, imageFile: ${imageFile.path}")
-                val description = binding.addStoryEdtDescriptionValue.text.toString()
+                showLoadingOnBtnUpload(true)
+                lifecycleScope.launch {
+                    val imageFile: File
+                    withContext(Dispatchers.IO) {
+                        Log.d(TAG, "uploadImage, uriToFile, reduceFileImage")
+                        imageFile = CameraHelper.uriToFile(uri, requireActivity()).reduceFileImage()
+                    }
+                    withContext(Dispatchers.Main) {
+                        Log.d(TAG, "uploadImage, imageFile: ${imageFile.path}")
+                        val description = binding.addStoryEdtDescriptionValue.text.toString()
 
-                addStoryViewModel.addStory(imageFile, description)
-            } ?: Snackbar.make(view, getString(R.string.image_upload_empty), Snackbar.LENGTH_SHORT)
-                .show()
+                        addStoryViewModel.addStory(imageFile, description)
+                    }
+                }
+            }
+            if (currentImageUri == null) {
+                Snackbar.make(view, getString(R.string.image_upload_empty), Snackbar.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 
