@@ -34,13 +34,13 @@ class ListStoryAdapter(
         holder.binding.itemRowStoryTvDescription.transitionName =
             "detail_story_tv_deskripsi_transition_$id"
 
-        story?.let { holder.bind(it, position) }
+        story?.let { holder.bind(it) }
     }
 
     inner class ListViewHolder(val binding: ItemRowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(story: StoryEntity, position: Int) {
+        fun bind(story: StoryEntity) {
             binding.root.setOnClickListener {
                 onTap(story, binding)
             }
