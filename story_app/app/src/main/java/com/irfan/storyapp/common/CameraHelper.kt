@@ -18,12 +18,14 @@ object CameraHelper {
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
     private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
 
+    private const val MIME_TYPE_IMAGE_JPEG = "image/jpeg"
+
     fun getImageUri(context: Context): Uri {
         var uri: Uri? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, "$timeStamp.jpg")
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                put(MediaStore.MediaColumns.MIME_TYPE, MIME_TYPE_IMAGE_JPEG)
                 put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/MyCamera/")
             }
 

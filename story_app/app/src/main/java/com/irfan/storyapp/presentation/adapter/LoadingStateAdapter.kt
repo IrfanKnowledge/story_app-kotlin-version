@@ -1,12 +1,12 @@
 package com.irfan.storyapp.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.databinding.ItemLoadingBinding
 
 class LoadingStateAdapter(
@@ -45,7 +45,7 @@ class LoadingStateAdapter(
 
             if (loadState is LoadState.Error) {
                 val localizedMessage = loadState.error.localizedMessage
-                Log.d(TAG, "bind, LoadState.Error: $localizedMessage")
+                MyLogger.d(TAG, "bind, LoadState.Error: $localizedMessage")
                 binding.itemLoadingErrorMessage.text = errorMessage
             }
 

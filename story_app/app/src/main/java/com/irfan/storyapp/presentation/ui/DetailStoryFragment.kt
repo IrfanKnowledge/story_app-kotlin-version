@@ -2,17 +2,17 @@ package com.irfan.storyapp.presentation.ui
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
+import com.irfan.storyapp.common.loadImage
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentDetailStoryBinding
 import com.irfan.storyapp.presentation.view_model.DetailStoryViewModel
@@ -72,7 +72,7 @@ class DetailStoryFragment : Fragment() {
     ) {
         viewModelSetting.getTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(HomeFragment.TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
+                MyLogger.d(HomeFragment.TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
                 when (resultState) {
                     is ResultState.HasData -> {
                         onHasData(resultState.data)
@@ -122,9 +122,7 @@ class DetailStoryFragment : Fragment() {
 
                             val detailStory = resultState.data?.data
 
-                            Glide.with(view.context)
-                                .load(detailStory?.photoUrl)
-                                .into(detailStoryImgStory)
+                            detailStoryImgStory.loadImage(detailStory?.photoUrl ?: "")
 
                             detailStoryTvDateTime.text = formatDateTime(detailStory?.createdAt ?: "")
                             detailStoryTvTitle.text = detailStory?.name
@@ -172,12 +170,12 @@ class DetailStoryFragment : Fragment() {
 
     private fun formatDateTime(dateTimeString: String): String {
         return try {
-            Log.d(TAG, "formatDateTime, dateTimeString: $dateTimeString")
+            MyLogger.d(TAG, "formatDateTime, dateTimeString: $dateTimeString")
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
             val date = simpleDateFormat.parse(dateTimeString) as Date
             DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.LONG).format(date)
         } catch (e: Exception) {
-            Log.d(TAG, "formatDateTime, e: $e")
+            MyLogger.d(TAG, "formatDateTime, e: $e")
             ""
         }
     }

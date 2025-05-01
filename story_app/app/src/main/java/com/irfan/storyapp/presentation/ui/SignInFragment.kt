@@ -1,7 +1,6 @@
 package com.irfan.storyapp.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentSignInBinding
@@ -67,7 +67,7 @@ class SignInFragment : Fragment() {
     ) {
         viewModelSignIn.getSignInResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(TAG, "viewModelGetSignInResultObserve, resultState: $resultState")
+                MyLogger.d(TAG, "viewModelGetSignInResultObserve, resultState: $resultState")
                 when (resultState) {
                     is ResultState.Initial -> Unit
                     is ResultState.Loading -> showLoading(true)
@@ -92,7 +92,7 @@ class SignInFragment : Fragment() {
     private fun viewModelGetSaveTokenResultObserve(viewModelSetting: SettingViewModel, view: View) {
         viewModelSetting.getSaveTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(TAG, "viewModelGetSaveTokenResultObserve, resultState: $resultState")
+                MyLogger.d(TAG, "viewModelGetSaveTokenResultObserve, resultState: $resultState")
                 when (resultState) {
                     is ResultState.Loading -> showLoading(true)
                     is ResultState.HasData -> {

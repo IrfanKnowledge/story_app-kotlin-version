@@ -18,12 +18,6 @@ class CustomEditTextPassword @JvmOverloads constructor(
 
     private var isPasswordVisible: Boolean = false
 
-    private var visibilityButtonImageOn: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.baseline_visibility_24_black) as Drawable
-
-    private var visibilityButtonImageOff: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.baseline_visibility_off_24_black) as Drawable
-
     init {
         showVisibilityButtonImageOn()
 
@@ -36,7 +30,8 @@ class CustomEditTextPassword @JvmOverloads constructor(
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (p0.toString().length < 8) {
-                    setError("Password tidak boleh kurang dari 8 karakter", null)
+                    val messageError = context.getString(R.string.password_validate_length_min)
+                    setError(messageError, null)
                 } else {
                     error = null
                 }
@@ -62,14 +57,22 @@ class CustomEditTextPassword @JvmOverloads constructor(
         )
     }
 
+    private fun getDrawableVisibility(isVisible: Boolean): Drawable {
+        return if (isVisible) {
+            ContextCompat.getDrawable(context, R.drawable.baseline_visibility_24_black) as Drawable
+        } else {
+            ContextCompat.getDrawable(context, R.drawable.baseline_visibility_off_24_black) as Drawable
+        }
+    }
+
     private fun showVisibilityButtonImageOn() {
-        setButtonDrawables(endOfTheText = visibilityButtonImageOn)
+        setButtonDrawables(endOfTheText = getDrawableVisibility(true))
         inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
         isPasswordVisible = false
     }
 
     private fun showVisibilityButtonImageOff() {
-        setButtonDrawables(endOfTheText = visibilityButtonImageOff)
+        setButtonDrawables(endOfTheText = getDrawableVisibility(false))
         inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         isPasswordVisible = true
     }

@@ -1,8 +1,8 @@
 package com.irfan.storyapp.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.data.repository.SettingRepository
 import kotlinx.coroutines.launch
@@ -13,14 +13,14 @@ class SettingViewModel(private val settingRepository: SettingRepository) :
     fun getTokenResult() = settingRepository.getTokenResult
 
     fun fetchToken() {
-        Log.d(TAG, "getToken: execute")
+        MyLogger.d(TAG, "getToken: execute")
         settingRepository.getToken()
     }
 
     fun getSaveTokenResult() = settingRepository.saveTokenResult
 
     fun saveToken(token: String) {
-        Log.d(TAG, "saveToken: execute")
+        MyLogger.d(TAG, "saveToken: execute")
         viewModelScope.launch {
             settingRepository.saveToken(token)
         }
@@ -33,7 +33,7 @@ class SettingViewModel(private val settingRepository: SettingRepository) :
     fun getDeleteTokenResult() = settingRepository.deleteTokenResult
 
     fun deleteToken() {
-        Log.d(TAG, "deleteToken: execute")
+        MyLogger.d(TAG, "deleteToken: execute")
         viewModelScope.launch {
             settingRepository.deleteToken()
         }

@@ -2,7 +2,6 @@ package com.irfan.storyapp.presentation.ui
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +16,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentHomeBinding
@@ -40,7 +40,8 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val animation = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        val animation =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         sharedElementReturnTransition = animation
         postponeEnterTransition(200, TimeUnit.MILLISECONDS)
 
@@ -82,7 +83,7 @@ class HomeFragment : Fragment() {
     ) {
         viewModelSetting.getTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
+                MyLogger.d(TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
                 when (resultState) {
                     is ResultState.HasData -> {
                         onHasData(resultState.data)
@@ -144,7 +145,7 @@ class HomeFragment : Fragment() {
             homeRv.layoutManager = LinearLayoutManager(requireActivity())
 
             adapterListStory = ListStoryAdapter { story, bindingItem ->
-                Log.d(TAG, "showRecyclerView, onTap, name: ${story.name}, id: ${story.id}")
+                MyLogger.d(TAG, "showRecyclerView, onTap, name: ${story.name}, id: ${story.id}")
 
                 val id = story.id ?: ""
                 val toDetailStoryFragment =
@@ -155,12 +156,6 @@ class HomeFragment : Fragment() {
                     bindingItem.itemRowStoryTvTitle to "detail_story_tv_title_transition",
                     bindingItem.itemRowStoryTvDescription to "detail_story_tv_deskripsi_transition"
                 )
-
-//                val extras = FragmentNavigatorExtras(
-//                    bindingItem.itemRowStoryImgContent to "detail_story_img_story_transition",
-//                    bindingItem.itemRowStoryTvTitle to "detail_story_tv_title_transition",
-//                    bindingItem.itemRowStoryTvDescription to "detail_story_tv_deskripsi_transition"
-//                )
 
                 view.findNavController().navigate(toDetailStoryFragment, extras)
             }
@@ -175,7 +170,7 @@ class HomeFragment : Fragment() {
 
             viewModelHome.refreshListStory.observe(viewLifecycleOwner) {
                 it.getContentIfNotHandled()?.let {
-                    Log.d(TAG, "showRecyclerView, refreshListStory: refresh")
+                    MyLogger.d(TAG, "showRecyclerView, refreshListStory: refresh")
                     adapterListStory.refresh()
                 }
             }
@@ -185,24 +180,24 @@ class HomeFragment : Fragment() {
             }
 
             adapterListStory.addLoadStateListener { loadState ->
-                Log.d(TAG, "showRecyclerView, addLoadStateListener: trigger")
-                Log.d(
+                MyLogger.d(TAG, "showRecyclerView, addLoadStateListener: trigger")
+                MyLogger.d(
                     TAG,
                     "showRecyclerView, addLoadStateListener, loadState.refresh: ${loadState.refresh}"
                 )
-                Log.d(
+                MyLogger.d(
                     TAG,
                     "showRecyclerView, addLoadStateListener, loadState.isIdle: ${loadState.isIdle}"
                 )
-                Log.d(
+                MyLogger.d(
                     TAG,
                     "showRecyclerView, addLoadStateListener, loadState.append: ${loadState.append}"
                 )
-                Log.d(
+                MyLogger.d(
                     TAG,
                     "showRecyclerView, addLoadStateListener, loadState.prepend: ${loadState.prepend}"
                 )
-                Log.d(
+                MyLogger.d(
                     TAG,
                     "showRecyclerView, addLoadStateListener, loadState.source: ${loadState.source}"
                 )
@@ -223,7 +218,7 @@ class HomeFragment : Fragment() {
             }
 
             homeFabAddStory.setOnClickListener {
-                Log.d(TAG, "showRecyclerView, FAB, onTap: navigate to Add Story page")
+                MyLogger.d(TAG, "showRecyclerView, FAB, onTap: navigate to Add Story page")
                 view.findNavController()
                     .navigate(R.id.action_homeFragment_to_addStoryFragment)
             }

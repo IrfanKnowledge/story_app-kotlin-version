@@ -2,7 +2,6 @@ package com.irfan.storyapp.presentation.ui
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.irfan.storyapp.R
 import com.irfan.storyapp.common.CameraHelper
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.common.reduceFileImage
 import com.irfan.storyapp.data.datasource.dataStore
@@ -44,7 +44,7 @@ class AddStoryFragment : Fragment() {
             viewModelAddStory?.currentImageUri = uri
             showImage()
         } else {
-            Log.d(TAG, "No media selected")
+            MyLogger.d(TAG, "No media selected")
         }
     }
 
@@ -86,7 +86,7 @@ class AddStoryFragment : Fragment() {
             viewModelAddStory = ViewModelProvider(this, factoryAddStory)[AddStoryViewModel::class.java]
 
             viewModelAddStory!!.getAddStoryResult().observe(viewLifecycleOwner) { resultState ->
-                Log.d(TAG, "onViewCreated, getAddStoryResult, resultState: $resultState")
+                MyLogger.d(TAG, "onViewCreated, getAddStoryResult, resultState: $resultState")
                 when (resultState) {
                     is ResultState.Initial -> Unit
                     is ResultState.Loading -> showLoadingOnBtnUpload(true)
@@ -135,7 +135,7 @@ class AddStoryFragment : Fragment() {
     ) {
         viewModelSetting.getTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(HomeFragment.TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
+                MyLogger.d(HomeFragment.TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
                 when (resultState) {
                     is ResultState.HasData -> {
                         onHasData(resultState.data)
@@ -166,7 +166,7 @@ class AddStoryFragment : Fragment() {
     private fun showImage() {
         viewModelAddStory?.apply {
             currentImageUri?.let {
-                Log.d(TAG, "showImage: $it")
+                MyLogger.d(TAG, "showImage: $it")
                 binding.addStoryImgStory.setImageURI(it)
             }
         }
@@ -182,11 +182,11 @@ class AddStoryFragment : Fragment() {
                 lifecycleScope.launch {
                     val imageFile: File
                     withContext(Dispatchers.IO) {
-                        Log.d(TAG, "uploadImage, uriToFile, reduceFileImage")
+                        MyLogger.d(TAG, "uploadImage, uriToFile, reduceFileImage")
                         imageFile = CameraHelper.uriToFile(uri, requireActivity()).reduceFileImage()
                     }
                     withContext(Dispatchers.Main) {
-                        Log.d(TAG, "uploadImage, imageFile: ${imageFile.path}")
+                        MyLogger.d(TAG, "uploadImage, imageFile: ${imageFile.path}")
                         val description = binding.addStoryEdtDescriptionValue.text.toString()
 
                         addStoryViewModel.addStory(imageFile, description)

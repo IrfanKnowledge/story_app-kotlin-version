@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/add_story_img_story"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/imgStoryDetail"
             android:contentDescription="@string/add_story_image_description"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_image_search_150_black"
@@ -100,26 +100,26 @@
             android:layout_marginTop="16dp"
             android:background="?attr/colorOutlineVariant"
             app:layout_constraintTop_toBottomOf="@+id/add_story_edt_description_layout"
-            app:layout_goneMarginTop="16dp"/>
+            app:layout_goneMarginTop="16dp" />
 
         <Button
             android:id="@+id/add_story_btn_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/upload"
-            app:layout_constraintTop_toBottomOf="@id/add_story_divider_horizontal_after_description"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/upload"
+            app:layout_constraintTop_toBottomOf="@id/add_story_divider_horizontal_after_description" />
 
         <ProgressBar
             android:id="@+id/add_story_loading_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/add_story_divider_horizontal_after_description"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_story_divider_horizontal_after_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

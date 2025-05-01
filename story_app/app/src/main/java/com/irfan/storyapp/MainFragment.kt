@@ -1,13 +1,13 @@
 package com.irfan.storyapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.data.datasource.dataStore
 import com.irfan.storyapp.databinding.FragmentMainBinding
@@ -35,8 +35,6 @@ class MainFragment : Fragment() {
             factorySetting
         }
 
-        showLoading()
-
         viewModelSetting.fetchToken()
 
         viewModelGetTokenResultObserve(viewModelSetting, view)
@@ -48,7 +46,7 @@ class MainFragment : Fragment() {
     ) {
         viewModelSetting.getTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                Log.d(TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
+                MyLogger.d(TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
 
                 when (resultState) {
                     is ResultState.Initial -> Unit
@@ -68,12 +66,6 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private fun showLoading() {
-        binding.apply {
-            signInProgressBar.visibility =  View.VISIBLE
         }
     }
 

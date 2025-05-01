@@ -3,7 +3,9 @@ package com.irfan.storyapp.common
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.widget.ImageView
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -52,6 +54,12 @@ private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
     return Bitmap.createBitmap(
         source, 0, 0, source.width, source.height, matrix, true
     )
+}
+
+fun ImageView.loadImage(url: String) {
+    Glide.with(this.context)
+        .load(url)
+        .into(this)
 }
 
 

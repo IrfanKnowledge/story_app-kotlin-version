@@ -1,9 +1,7 @@
 package com.irfan.storyapp.common
 
 open class SingleEvent<out T>(private val content: T) {
-    @Suppress("MemberVisibilityCanBePrivate")
-    var hasBeenHandled = false
-        private set
+    private var hasBeenHandled = false
     fun getContentIfNotHandled(): T? {
         return if (hasBeenHandled) {
             null

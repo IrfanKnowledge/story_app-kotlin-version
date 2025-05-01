@@ -1,10 +1,10 @@
 package com.irfan.storyapp.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
+import com.irfan.storyapp.common.MyLogger
 import com.irfan.storyapp.common.ResultState
 import com.irfan.storyapp.common.SingleEvent
 import com.irfan.storyapp.data.datasource.ApiService
@@ -23,7 +23,7 @@ class AddStoryRepository private constructor(private val apiService: ApiService)
 
     fun addStory(imageFile: File, description: String) {
         val addStoryLiveData: LiveData<ResultState<ResponseEntity<Unit?>?>> = liveData {
-            Log.d(TAG, "addStory, status: loading")
+            MyLogger.d(TAG, "addStory, status: loading")
             emit(ResultState.Loading)
 
             try {
@@ -41,12 +41,12 @@ class AddStoryRepository private constructor(private val apiService: ApiService)
                 val responseBody = response.body()
                 val responseErrorBodyString = response.errorBody()?.string()
 
-                Log.d(TAG, "addStory, onTry, responseCode: $responseCode")
+                MyLogger.d(TAG, "addStory, onTry, responseCode: $responseCode")
 
                 if (response.isSuccessful) {
-                    Log.d(TAG, "addStory, onTry, responseBody: $responseBody")
-                    Log.d(TAG, "addStory, onTry, message: ${responseBody?.message}")
-                    Log.d(TAG, "addStory, onTry, status: hasData")
+                    MyLogger.d(TAG, "addStory, onTry, responseBody: $responseBody")
+                    MyLogger.d(TAG, "addStory, onTry, message: ${responseBody?.message}")
+                    MyLogger.d(TAG, "addStory, onTry, status: hasData")
                     emit(ResultState.HasData(responseBody?.toEntity()))
                 } else {
                     val responseErrorBody =
@@ -54,15 +54,15 @@ class AddStoryRepository private constructor(private val apiService: ApiService)
                             .toEntity()
                     val message = responseErrorBody.message?.peekContent() ?: ""
 
-                    Log.d(TAG, "addStory, onTry, message: $message")
-                    Log.d(TAG, "addStory, onTry, status: error")
+                    MyLogger.d(TAG, "addStory, onTry, message: $message")
+                    MyLogger.d(TAG, "addStory, onTry, status: error")
                     emit(ResultState.Error(SingleEvent(message)))
                 }
             } catch (e: Exception) {
                 val message = e.message.toString()
 
-                Log.d(TAG, "addStory, onException, message: $message")
-                Log.d(TAG, "addStory, status: error")
+                MyLogger.d(TAG, "addStory, onException, message: $message")
+                MyLogger.d(TAG, "addStory, status: error")
                 emit(ResultState.Error(SingleEvent(message)))
             }
         }

@@ -39,13 +39,13 @@ data class Story(
 	val description: String? = null,
 
 	@field:SerializedName("lon")
-	val lon: Number? = null,
+	val lon: Double? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,
 
 	@field:SerializedName("lat")
-	val lat: Number? = null
+	val lat: Double? = null
 ) {
 	fun toEntity(): StoryEntity {
 		return StoryEntity(

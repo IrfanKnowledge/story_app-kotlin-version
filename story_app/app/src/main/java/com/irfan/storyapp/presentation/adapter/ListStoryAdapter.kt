@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.irfan.storyapp.common.loadImage
 import com.irfan.storyapp.databinding.ItemRowStoryBinding
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
@@ -21,20 +21,20 @@ class ListStoryAdapter(
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val story = getItem(position)
-        holder.binding.itemRowStoryTvTitle.text = story?.name ?: ""
-        holder.binding.itemRowStoryTvDescription.text = story?.description ?: ""
-        Glide.with(holder.itemView.context)
-            .load(story?.photoUrl)
-            .into(holder.binding.itemRowStoryImgContent)
+        holder.binding.apply {
+            itemRowStoryTvTitle.text = story?.name ?: ""
+            itemRowStoryTvDescription.text = story?.description ?: ""
+            itemRowStoryImgContent.loadImage(story?.photoUrl ?: "")
 
-        val id = story?.id ?: position.toString()
-        holder.binding.itemRowStoryImgContent.transitionName =
-            "detail_story_img_story_transition_$id"
-        holder.binding.itemRowStoryTvTitle.transitionName = "detail_story_tv_title_transition_$id"
-        holder.binding.itemRowStoryTvDescription.transitionName =
-            "detail_story_tv_deskripsi_transition_$id"
+            val id = story?.id ?: position.toString()
+            itemRowStoryImgContent.transitionName =
+                "detail_story_img_story_transition_$id"
+            itemRowStoryTvTitle.transitionName = "detail_story_tv_title_transition_$id"
+            itemRowStoryTvDescription.transitionName =
+                "detail_story_tv_deskripsi_transition_$id"
 
-        story?.let { holder.bind(it) }
+            story?.let { holder.bind(it) }
+        }
     }
 
     inner class ListViewHolder(val binding: ItemRowStoryBinding) :
