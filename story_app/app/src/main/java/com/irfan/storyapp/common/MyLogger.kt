@@ -9,4 +9,10 @@ object MyLogger {
             Log.d(tag, message)
         }
     }
+
+    fun e(tag: String, message: String, throwable: Throwable? = null) {
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, message, throwable)
+        }
+    }
 }

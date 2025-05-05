@@ -8,6 +8,7 @@
     <string name="name">Name</string>
     <string name="story_app">Story App</string>
     <string name="sign_out">Sign Out</string>
+    <string name="map">Map</string>
     <string name="story_image_view_description">Gambar dari Story yang dibagikan</string>
     <string name="reload">coba lagi</string>
     <string name="no_data">Tidak ada data</string>

@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/home_menu_group" android:menuCategory="container">
         <item
+            android:id="@+id/home_menu_map"
+            android:icon="@drawable/baseline_map_24_white"
+            android:title="@string/map"
+            app:showAsAction="ifRoom"/>
+        <item
             android:id="@+id/home_menu_sign_out"
             android:icon="@drawable/baseline_logout_24_white"
             android:title="@string/sign_out"
-            app:showAsAction="always"/>
+            app:showAsAction="ifRoom"/>
     </group>
 </menu>

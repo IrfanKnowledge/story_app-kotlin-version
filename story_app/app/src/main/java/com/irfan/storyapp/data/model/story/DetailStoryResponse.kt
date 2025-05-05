@@ -13,15 +13,15 @@ data class DetailStoryResponse(
 	val message: String? = null,
 
 	@field:SerializedName("story")
-	val story: Story? = null
+	val story: Story? = null,
 ) {
-	fun toEntity(): ResponseEntity<StoryEntity> {
-		return ResponseEntity(
-			error = error,
-			message = null,
-			data = story?.toEntity(),
-		);
-	}
+    fun toEntity(): ResponseEntity<StoryEntity> {
+        return ResponseEntity(
+            error = error,
+            message = null,
+            data = story?.toEntity(),
+        )
+    }
 }
 
 data class Story(
@@ -45,17 +45,17 @@ data class Story(
 	val id: String? = null,
 
 	@field:SerializedName("lat")
-	val lat: Double? = null
+	val lat: Double? = null,
 ) {
-	fun toEntity(): StoryEntity {
-		return StoryEntity(
-			id = id,
-			name = name,
-			description = description,
-			photoUrl = photoUrl,
-			createdAt = createdAt,
-			lat = lat,
-			lon = lon,
-		)
-	}
+    fun toEntity(): StoryEntity {
+        return StoryEntity(
+            id = id,
+            name = name,
+            description = description,
+            photoUrl = photoUrl,
+            createdAt = createdAt,
+            lat = lat,
+            lon = lon,
+        )
+    }
 }

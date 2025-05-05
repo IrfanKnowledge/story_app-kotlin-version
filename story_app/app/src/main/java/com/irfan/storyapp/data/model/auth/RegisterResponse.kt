@@ -17,6 +17,6 @@ data class RegisterResponse(
         return ResponseEntity(
             error = error,
             message = message,
-        );
+        )
     }
 }

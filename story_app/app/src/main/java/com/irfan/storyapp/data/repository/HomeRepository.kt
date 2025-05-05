@@ -11,14 +11,19 @@ import com.irfan.storyapp.data.datasource.home_datasource.HomePagingSource
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
 class HomeRepository private constructor(private val apiService: ApiService) {
-    fun getStories(pageSize: Int): LiveData<PagingData<StoryEntity>> {
+    /**
+     * location have 2 option:
+     *  - 0 = get all stories
+     *  - 1 = get all stories with location
+     */
+    fun getStories(pageSize: Int, location: Int = 0): LiveData<PagingData<StoryEntity>> {
         MyLogger.d(TAG, "getStories, status: start")
         return Pager(
             config = PagingConfig(
                 pageSize = pageSize,
             ),
             pagingSourceFactory = {
-                HomePagingSource(apiService)
+                HomePagingSource(apiService, location)
             }
         ).liveData
     }

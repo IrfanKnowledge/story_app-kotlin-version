@@ -83,7 +83,8 @@ class AddStoryFragment : Fragment() {
             val viewModelHome: HomeViewModel by navGraphViewModels(R.id.main_navigation)
 
             val factoryAddStory = AddStoryViewModelFactory.getInstance(token)
-            viewModelAddStory = ViewModelProvider(this, factoryAddStory)[AddStoryViewModel::class.java]
+            viewModelAddStory =
+                ViewModelProvider(this, factoryAddStory)[AddStoryViewModel::class.java]
 
             viewModelAddStory!!.getAddStoryResult().observe(viewLifecycleOwner) { resultState ->
                 MyLogger.d(TAG, "onViewCreated, getAddStoryResult, resultState: $resultState")
@@ -98,6 +99,7 @@ class AddStoryFragment : Fragment() {
                         }
                         view.findNavController().popBackStack()
                     }
+
                     is ResultState.Error -> {
                         showLoadingOnBtnUpload(false)
                         resultState.error.getContentIfNotHandled()?.let { message ->
@@ -135,7 +137,10 @@ class AddStoryFragment : Fragment() {
     ) {
         viewModelSetting.getTokenResult().observe(viewLifecycleOwner) { resultState ->
             if (resultState != null) {
-                MyLogger.d(HomeFragment.TAG, "viewModelGetTokenResultObserve, resultState: $resultState")
+                MyLogger.d(
+                    HomeFragment.TAG,
+                    "viewModelGetTokenResultObserve, resultState: $resultState"
+                )
                 when (resultState) {
                     is ResultState.HasData -> {
                         onHasData(resultState.data)

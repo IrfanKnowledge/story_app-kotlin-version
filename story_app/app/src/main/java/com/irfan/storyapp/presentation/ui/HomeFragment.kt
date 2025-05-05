@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapterListStory: ListStoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +71,11 @@ class HomeFragment : Fragment() {
         showLoading(false)
 
         binding.homeToolbar.setOnMenuItemClickListener { menuItem ->
-            onMenuItemClick(menuItem, viewModelSetting)
+            onMenuItemClick(menuItem, viewModelSetting, view)
+        }
+
+        binding.homeToolbar.setOnMenuItemClickListener { menuItem ->
+            onMenuItemClick(menuItem, viewModelSetting, view)
         }
     }
 
@@ -103,9 +106,16 @@ class HomeFragment : Fragment() {
     private fun onMenuItemClick(
         menuItem: MenuItem,
         viewModelSetting: SettingViewModel,
+        view: View,
     ) = when (menuItem.itemId) {
         R.id.home_menu_sign_out -> {
             viewModelSetting.deleteToken()
+            true
+        }
+
+        R.id.home_menu_map -> {
+            view.findNavController()
+                .navigate(R.id.action_homeFragment_to_mapsFragment)
             true
         }
 
@@ -144,7 +154,7 @@ class HomeFragment : Fragment() {
         binding.apply {
             homeRv.layoutManager = LinearLayoutManager(requireActivity())
 
-            adapterListStory = ListStoryAdapter { story, bindingItem ->
+            val adapterListStory = ListStoryAdapter { story, bindingItem ->
                 MyLogger.d(TAG, "showRecyclerView, onTap, name: ${story.name}, id: ${story.id}")
 
                 val id = story.id ?: ""
@@ -205,17 +215,21 @@ class HomeFragment : Fragment() {
                 homeSwipeRefresh.isRefreshing = loadState.refresh is LoadState.Loading
 
                 if (loadState.refresh is LoadState.Loading) {
-                    viewModelHome.updateListStory = true
+                    viewModelHome.isUpdateListStory = true
                 }
-                if (loadState.refresh is LoadState.NotLoading && viewModelHome.updateListStory) {
-                    viewModelHome.updateListStory = false
+                if (loadState.refresh is LoadState.NotLoading && viewModelHome.isUpdateListStory) {
+                    viewModelHome.isUpdateListStory = false
                     homeRv.scrollToPosition(0)
+
+                    viewModelHome.listStorySnapshot = adapterListStory.snapshot().items.take(10)
+                    MyLogger.d(TAG, "showRecyclerView, listStorySnapshot: ${viewModelHome.listStorySnapshot}")
                 }
             }
 
-            viewModelHome.listStory.observe(viewLifecycleOwner) {
-                adapterListStory.submitData(lifecycle, it)
+            viewModelHome.listStory.observe(viewLifecycleOwner) { pagingData ->
+                adapterListStory.submitData(lifecycle, pagingData)
             }
+
 
             homeFabAddStory.setOnClickListener {
                 MyLogger.d(TAG, "showRecyclerView, FAB, onTap: navigate to Add Story page")

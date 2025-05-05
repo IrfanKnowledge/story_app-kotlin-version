@@ -20,7 +20,7 @@ data class ListStoryResponse(
             error = error,
             message = null,
             data = listStory?.map { it.toEntity()},
-        );
+        )
     }
 }
 
