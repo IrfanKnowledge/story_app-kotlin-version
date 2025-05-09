@@ -20,9 +20,13 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.irfan.storyapp.R
 import com.irfan.storyapp.common.MyLogger
+import com.irfan.storyapp.databinding.FragmentMapsBinding
 import com.irfan.storyapp.presentation.view_model.HomeViewModel
 
 class MapsFragment : Fragment() {
+    private var _binding: FragmentMapsBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var map: GoogleMap
 
     private val requestPermissionLauncher =
@@ -40,8 +44,11 @@ class MapsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+    ): View {
+        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,14 +57,6 @@ class MapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera.
-     * If Google Play services is not installed on the device, the user will be prompted to
-     * install it inside the SupportMapFragment. This method will only be triggered once the
-     * user has installed Google Play services and returned to the app.
-     */
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
 
@@ -127,13 +126,23 @@ class MapsFragment : Fragment() {
     private fun setMapStyle() {
         try {
             val success =
-                map.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireActivity(), R.raw.map_style))
+                map.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        requireActivity(),
+                        R.raw.map_style
+                    )
+                )
             if (!success) {
                 MyLogger.e(TAG, "Style parsing failed.")
             }
         } catch (exception: Resources.NotFoundException) {
             MyLogger.e(TAG, "Can't find style. Error: ", exception)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

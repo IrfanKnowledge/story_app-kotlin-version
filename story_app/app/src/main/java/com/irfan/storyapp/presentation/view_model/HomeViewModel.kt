@@ -12,7 +12,7 @@ import com.irfan.storyapp.domain.entity.story.StoryEntity
 
 class HomeViewModel(homeRepository: HomeRepository) : ViewModel() {
     val listStory: LiveData<PagingData<StoryEntity>> =
-        homeRepository.getStories(5, 1).cachedIn(viewModelScope)
+        homeRepository.getStories(5).cachedIn(viewModelScope)
 
     var listStorySnapshot: List<StoryEntity>? = null
 

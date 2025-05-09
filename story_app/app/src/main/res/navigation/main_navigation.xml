@@ -95,5 +95,12 @@
         android:id="@+id/mapsFragment"
         android:name="com.irfan.storyapp.presentation.ui.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mapsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

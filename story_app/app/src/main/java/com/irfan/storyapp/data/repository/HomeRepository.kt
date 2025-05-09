@@ -16,7 +16,7 @@ class HomeRepository private constructor(private val apiService: ApiService) {
      *  - 0 = get all stories
      *  - 1 = get all stories with location
      */
-    fun getStories(pageSize: Int, location: Int = 0): LiveData<PagingData<StoryEntity>> {
+    fun getStories(pageSize: Int, location: Int? = null): LiveData<PagingData<StoryEntity>> {
         MyLogger.d(TAG, "getStories, status: start")
         return Pager(
             config = PagingConfig(

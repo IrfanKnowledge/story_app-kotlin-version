@@ -51,7 +51,7 @@ class HomeViewModelTest {
         val expectedStory = MutableLiveData<PagingData<StoryEntity>>()
         expectedStory.value = data
 
-        Mockito.`when`(homeRepository.getStories(5, 1)).thenReturn(expectedStory)
+        Mockito.`when`(homeRepository.getStories(5)).thenReturn(expectedStory)
 
         val mainViewModel = HomeViewModel(homeRepository)
         val actualStory: PagingData<StoryEntity> = mainViewModel.listStory.getOrAwaitValue()
@@ -73,7 +73,7 @@ class HomeViewModelTest {
         val data: PagingData<StoryEntity> = PagingData.from(emptyList())
         val expectedStory = MutableLiveData<PagingData<StoryEntity>>()
         expectedStory.value = data
-        Mockito.`when`(homeRepository.getStories(5, 1)).thenReturn(expectedStory)
+        Mockito.`when`(homeRepository.getStories(5)).thenReturn(expectedStory)
 
         val homeViewModel = HomeViewModel(homeRepository)
         val actualStory: PagingData<StoryEntity> = homeViewModel.listStory.getOrAwaitValue()

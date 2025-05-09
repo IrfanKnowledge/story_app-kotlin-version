@@ -58,11 +58,10 @@ class CustomEditTextPassword @JvmOverloads constructor(
     }
 
     private fun getDrawableVisibility(isVisible: Boolean): Drawable {
-        return if (isVisible) {
-            ContextCompat.getDrawable(context, R.drawable.baseline_visibility_24_black) as Drawable
-        } else {
-            ContextCompat.getDrawable(context, R.drawable.baseline_visibility_off_24_black) as Drawable
-        }
+        return ContextCompat.getDrawable(
+            context,
+            if (isVisible) R.drawable.baseline_visibility_24_black else R.drawable.baseline_visibility_off_24_black
+        ) as Drawable
     }
 
     private fun showVisibilityButtonImageOn() {

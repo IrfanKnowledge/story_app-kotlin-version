@@ -44,9 +44,11 @@ class AddStoryRepository private constructor(private val apiService: ApiService)
                 MyLogger.d(TAG, "addStory, onTry, responseCode: $responseCode")
 
                 if (response.isSuccessful) {
-                    MyLogger.d(TAG, "addStory, onTry, responseBody: $responseBody")
-                    MyLogger.d(TAG, "addStory, onTry, message: ${responseBody?.message}")
-                    MyLogger.d(TAG, "addStory, onTry, status: hasData")
+                    MyLogger.apply {
+                        d(TAG, "addStory, onTry, responseBody: $responseBody")
+                        d(TAG, "addStory, onTry, message: ${responseBody?.message}")
+                        d(TAG, "addStory, onTry, status: hasData")
+                    }
                     emit(ResultState.HasData(responseBody?.toEntity()))
                 } else {
                     val responseErrorBody =

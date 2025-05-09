@@ -9,7 +9,7 @@ import com.irfan.storyapp.data.model.ErrorResponse
 import com.irfan.storyapp.data.repository.AuthRepository
 import com.irfan.storyapp.domain.entity.story.StoryEntity
 
-class HomePagingSource(private val apiService: ApiService, private val location: Int = 0) : PagingSource<Int, StoryEntity>() {
+class HomePagingSource(private val apiService: ApiService, private val location: Int? = null) : PagingSource<Int, StoryEntity>() {
 
     override fun getRefreshKey(state: PagingState<Int, StoryEntity>): Int? {
         MyLogger.d(TAG, "getRefreshKey, start")

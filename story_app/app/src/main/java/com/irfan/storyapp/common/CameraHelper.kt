@@ -18,13 +18,14 @@ object CameraHelper {
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
     private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
 
+    private const val FILENAME_TYPE_JPG = ".jpg"
     private const val MIME_TYPE_IMAGE_JPEG = "image/jpeg"
 
     fun getImageUri(context: Context): Uri {
         var uri: Uri? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, "$timeStamp.jpg")
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "$timeStamp$FILENAME_TYPE_JPG")
                 put(MediaStore.MediaColumns.MIME_TYPE, MIME_TYPE_IMAGE_JPEG)
                 put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/MyCamera/")
             }
@@ -39,7 +40,7 @@ object CameraHelper {
 
     private fun getImageUriForPreQ(context: Context): Uri {
         val filesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageFile = File(filesDir, "/MyCamera/$timeStamp.jpg")
+        val imageFile = File(filesDir, "/MyCamera/$timeStamp$FILENAME_TYPE_JPG")
         if (imageFile.parentFile?.exists() == false) imageFile.parentFile?.mkdir()
         return FileProvider.getUriForFile(
             context,
@@ -54,7 +55,11 @@ object CameraHelper {
         val outputStream = myFile.outputStream()
         val buffer = ByteArray(1024)
         var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) outputStream.write(buffer, 0, length)
+        while (inputStream.read(buffer).also { length = it } > 0) outputStream.write(
+            buffer,
+            0,
+            length
+        )
         outputStream.close()
         inputStream.close()
         return myFile
