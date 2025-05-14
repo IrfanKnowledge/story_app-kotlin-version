@@ -79,6 +79,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun viewModelGetTokenResultObserve(
         viewModelSetting: SettingViewModel,
         view: View,

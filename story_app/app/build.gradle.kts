@@ -80,7 +80,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.exifinterface) // exif, konfigurasi gambar seperti rotasi
     implementation(libs.play.services.maps)
 
     testImplementation(libs.junit)
